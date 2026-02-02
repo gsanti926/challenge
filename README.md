@@ -67,6 +67,8 @@ GET https://beta.id90travel.com/api/v3/hotels.json
 - `currency` - Currency code (e.g., "USD")
 - `per_page` - Results per page (e.g., 500)
 - `page` - Page number
+- `price_low` - keeps empty
+- `price_high` - keeps empty
 - `v` - API version (use: 1018293)
 
 **Required Headers:**
