@@ -25,13 +25,14 @@ export interface LoginResponse {
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AuthService {
   private loggedIn = false;
   private airlinesUrl = 'https://beta.id90travel.com/airlines';
   private sessionsUrl = 'https://beta.id90travel.com/api/v1/sessions';
   private appVersion = '1018293';
+  private readonly TOKEN_KEY = '';
 
   constructor(private http: HttpClient) {}
 
@@ -42,10 +43,10 @@ export class AuthService {
   login(airlineCode: string, employeeNumber: string, password: string): Observable<any> {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
-      'Accept': 'application/json, text/plain, */*',
+      Accept: 'application/json, text/plain, */*',
       'x-api-call-v2': 'true',
       'x-app-name': 'angular-desktop',
-      'x-app-version': this.appVersion
+      'x-app-version': this.appVersion,
     });
 
     const body: LoginRequest = {
@@ -54,25 +55,32 @@ export class AuthService {
       password: password,
       remember_me: '1',
       redirect: '/',
-      check_generic: true
+      check_generic: true,
     };
 
-    return this.http.post<LoginResponse>(
-      `${this.sessionsUrl}?v=${this.appVersion}`,
-      body,
-      { headers }
-    ).pipe(
-      tap(() => {
-        this.loggedIn = true;
-      })
-    );
+    return this.http
+      .post<LoginResponse>(`${this.sessionsUrl}?v=${this.appVersion}`, body, { headers })
+      .pipe(
+        tap((response) => {
+          if (response.token) {
+            localStorage.setItem(this.TOKEN_KEY, response.token);
+            this.loggedIn = true;
+            console.log('TOKEN GUARDADO:', response.token);
+          }
+        }),
+      );
   }
 
   logout(): void {
     this.loggedIn = false;
+    localStorage.removeItem(this.TOKEN_KEY);
   }
 
   isLoggedIn(): boolean {
     return this.loggedIn;
+  }
+
+  getToken(): string | null {
+    return localStorage.getItem(this.TOKEN_KEY);
   }
 }
