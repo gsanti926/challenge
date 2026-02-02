@@ -3,9 +3,10 @@ import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-landing',
+  standalone: true,
   imports: [],
   templateUrl: './landing.html',
-  styleUrl: './landing.scss',
+  styleUrls: ['./landing.scss'],
 })
 export class Landing {
   constructor(private router: Router) {}

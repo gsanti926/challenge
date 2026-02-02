@@ -1,0 +1,24 @@
+.autocomplete-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  max-height: 240px;
+  overflow: auto;
+  background: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.125);
+  border-top: none; /* sits under the input group border */
+  z-index: 1055; /* above cards/modals if needed */
+  box-shadow: 0 .5rem 1rem rgba(0,0,0,.15);
+}
+
+/* Ensure inputs don't get covered by dropdown borders */
+.input-group > .form-control {
+  position: relative;
+  z-index: 1060;
+}
+
+/* Optional: refine list items hover */
+.autocomplete-dropdown .list-group-item-action:hover {
+  background-color: #f8f9fa;
+}

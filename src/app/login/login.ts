@@ -7,9 +7,10 @@ import { AuthService, Airline } from '../core/auth/auth.service';
 
 @Component({
   selector: 'app-login',
+  standalone: true,
   imports: [CommonModule, FormsModule, NgSelectModule],
   templateUrl: './login.html',
-  styleUrl: './login.scss',
+  styleUrls: ['./login.scss'],
 })
 export class Login implements OnInit {
   airlines: Airline[] = [];
