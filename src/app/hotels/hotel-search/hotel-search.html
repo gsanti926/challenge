@@ -1,1 +1,113 @@
-<p>hotel-search works!</p>
+<div class="hotel-search-container">
+  <div class="search-form">
+    <h1>Search Hotels</h1>
+
+    <div class="form-row">
+      <div class="form-group destination-group">
+        <label for="destination">Destination</label>
+        <input
+          type="text"
+          id="destination"
+          [(ngModel)]="searchText"
+          (input)="onSearchInput()"
+          (blur)="hideAutocomplete()"
+          placeholder="Search city..."
+          autocomplete="off"
+        />
+        @if (showAutocomplete) {
+          <div class="autocomplete-dropdown">
+            @for (item of autocompleteResults; track item.id) {
+              <div class="autocomplete-item" (mousedown)="selectDestination(item)">
+                {{ item.displayName }}
+              </div>
+            }
+          </div>
+        }
+        @if (loadingAutocomplete) {
+          <div class="loading-indicator">Searching...</div>
+        }
+      </div>
+
+      <div class="form-group">
+        <label for="checkin">Check-in</label>
+        <input
+          type="date"
+          id="checkin"
+          [(ngModel)]="checkin"
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="checkout">Check-out</label>
+        <input
+          type="date"
+          id="checkout"
+          [(ngModel)]="checkout"
+        />
+      </div>
+
+      <div class="form-group">
+        <button class="search-button" (click)="searchHotels()" [disabled]="loadingHotels">
+          @if (loadingHotels) {
+            Searching...
+          } @else {
+            Search
+          }
+        </button>
+      </div>
+    </div>
+
+    @if (error) {
+      <div class="error-message">{{ error }}</div>
+    }
+  </div>
+
+  @if (hotels.length > 0) {
+    <div class="hotels-results">
+      <h2>Results ({{ hotels.length }} hotels)</h2>
+      <div class="hotels-grid">
+        @for (hotel of hotels; track hotel.id) {
+          <div class="hotel-card">
+            <div class="hotel-image">
+              @if (hotel.image) {
+                <img
+                  [src]="getImageUrl(hotel.image)"
+                  [alt]="hotel.name"
+                />
+              } @else {
+                <div class="no-image">No image</div>
+              }
+            </div>
+            <div class="hotel-info">
+              <h3 class="hotel-name">{{ hotel.name }}</h3>
+              <p class="hotel-location-desc">{{ hotel.location_description }}</p>
+              <p class="hotel-location">{{ hotel.location.city }}, {{ hotel.location.country }}</p>
+              @if (hotel.star_rating) {
+                <div class="hotel-rating">
+                  <span class="stars">
+                    @for (star of [1,2,3,4,5].slice(0, hotel.star_rating); track star) {
+                      <span>&#9733;</span>
+                    }
+                  </span>
+                </div>
+              }
+              <div class="hotel-price">
+                <span class="price">USD {{ hotel.display_rate | number:'1.2-2' }}/night</span>
+                @if (hotel.savings_percent && hotel.savings_percent > 0) {
+                  <span class="savings">{{ hotel.savings_percent * 100 | number:'1.0-0' }}% off</span>
+                }
+              </div>
+              <div class="hotel-total">
+                Total: USD {{ hotel.total | number:'1.2-2' }} ({{ hotel.nights }} nights)
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  }
+
+  @if (!loadingHotels && hotels.length === 0 && selectedDestination && checkin && checkout) {
+    <div class="no-results">No hotels found for your search criteria.</div>
+  }
+</div>
