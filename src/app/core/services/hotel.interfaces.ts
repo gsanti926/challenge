@@ -1,57 +1,66 @@
 export interface AutocompleteItem {
-  id: number;
-  name: string;
+  id: string;
+  displayName: string;
+  lat: string;
+  lng: string;
+  resultType: string;
+  topDestination?: string;
+  countryCode?: string;
+  resolution?: number;
+}
+
+export interface HotelLocation {
+  city: string;
+  country: string;
+  description: string;
   latitude: number;
   longitude: number;
-  type: string;
-  city?: string;
+  region?: string;
   state?: string;
-  country?: string;
-  display_name?: string;
 }
 
-export interface AutocompleteResponse {
-  results: AutocompleteItem[];
-}
-
-export interface HotelImage {
-  url: string;
-  thumbnail_url?: string;
-}
-
-export interface HotelAmenity {
-  id: number;
-  name: string;
+export interface HotelRatings {
+  property?: {
+    overallRating?: {
+      type: string;
+      value: number;
+      provider: string;
+    };
+  };
+  guest?: {
+    overallRating?: {
+      count: number;
+      overall: number;
+      overallCategory: string;
+      provider: string;
+    };
+  };
 }
 
 export interface Hotel {
-  id: number;
+  id: string;
   name: string;
-  address: string;
-  city: string;
-  state: string;
-  country: string;
-  postal_code: string;
-  latitude: number;
-  longitude: number;
+  image: string;
+  images: string[];
+  location: HotelLocation;
+  location_description: string;
   star_rating: number;
-  guest_rating: number;
-  review_count: number;
-  price: number;
-  original_price?: number;
-  currency: string;
-  images: HotelImage[];
-  amenities: HotelAmenity[];
-  description?: string;
-  thumbnail_url?: string;
+  review_rating: number;
+  display_rate: number;
+  retail_rate: number;
+  total: number;
+  subtotal: number;
+  taxes_and_fees: number;
+  nights: number;
+  chain?: string;
+  amenities: number[];
+  ratings?: HotelRatings;
+  savings_percent?: number;
+  savings_amount?: number;
 }
 
 export interface HotelsResponse {
   hotels: Hotel[];
-  total_count: number;
-  page: number;
-  per_page: number;
-  total_pages: number;
 }
 
 export interface HotelSearchParams {

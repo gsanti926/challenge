@@ -18,7 +18,7 @@
           <div class="autocomplete-dropdown">
             @for (item of autocompleteResults; track item.id) {
               <div class="autocomplete-item" (mousedown)="selectDestination(item)">
-                {{ item.name }}
+                {{ item.displayName }}
               </div>
             }
           </div>
@@ -69,9 +69,9 @@
         @for (hotel of hotels; track hotel.id) {
           <div class="hotel-card">
             <div class="hotel-image">
-              @if (hotel.thumbnail_url || (hotel.images && hotel.images.length > 0)) {
+              @if (hotel.image) {
                 <img
-                  [src]="hotel.thumbnail_url || hotel.images[0]?.url"
+                  [src]="getImageUrl(hotel.image)"
                   [alt]="hotel.name"
                 />
               } @else {
@@ -80,8 +80,8 @@
             </div>
             <div class="hotel-info">
               <h3 class="hotel-name">{{ hotel.name }}</h3>
-              <p class="hotel-address">{{ hotel.address }}</p>
-              <p class="hotel-location">{{ hotel.city }}, {{ hotel.state }}, {{ hotel.country }}</p>
+              <p class="hotel-location-desc">{{ hotel.location_description }}</p>
+              <p class="hotel-location">{{ hotel.location.city }}, {{ hotel.location.country }}</p>
               @if (hotel.star_rating) {
                 <div class="hotel-rating">
                   <span class="stars">
@@ -92,10 +92,13 @@
                 </div>
               }
               <div class="hotel-price">
-                <span class="price">{{ hotel.currency }} {{ hotel.price }}</span>
-                @if (hotel.original_price && hotel.original_price > hotel.price) {
-                  <span class="original-price">{{ hotel.currency }} {{ hotel.original_price }}</span>
+                <span class="price">USD {{ hotel.display_rate | number:'1.2-2' }}/night</span>
+                @if (hotel.savings_percent && hotel.savings_percent > 0) {
+                  <span class="savings">{{ hotel.savings_percent * 100 | number:'1.0-0' }}% off</span>
                 }
+              </div>
+              <div class="hotel-total">
+                Total: USD {{ hotel.total | number:'1.2-2' }} ({{ hotel.nights }} nights)
               </div>
             </div>
           </div>

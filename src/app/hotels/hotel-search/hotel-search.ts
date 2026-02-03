@@ -59,7 +59,7 @@ export class HotelSearch {
 
   selectDestination(item: AutocompleteItem): void {
     this.selectedDestination = item;
-    this.searchText = item.name;
+    this.searchText = item.displayName;
     this.showAutocomplete = false;
     this.autocompleteResults = [];
   }
@@ -80,9 +80,9 @@ export class HotelSearch {
     const params: HotelSearchParams = {
       checkin: this.checkin,
       checkout: this.checkout,
-      destination: this.selectedDestination.name,
-      latitude: this.selectedDestination.latitude,
-      longitude: this.selectedDestination.longitude,
+      destination: this.selectedDestination.displayName,
+      latitude: parseFloat(this.selectedDestination.lat),
+      longitude: parseFloat(this.selectedDestination.lng),
       rooms: 1,
       guests: [2],
       currency: 'USD',
@@ -110,5 +110,12 @@ export class HotelSearch {
     setTimeout(() => {
       this.showAutocomplete = false;
     }, 200);
+  }
+
+  getImageUrl(image: string): string {
+    if (image.startsWith('//')) {
+      return 'https:' + image;
+    }
+    return image;
   }
 }
